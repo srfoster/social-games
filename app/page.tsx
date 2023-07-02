@@ -1,95 +1,67 @@
+'use client'
 import Image from 'next/image'
 import styles from './page.module.css'
+import { useState } from 'react'
+import {stories} from './stories/index'
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 export default function Home() {
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <StoryGame story={stories.mouse_asl} />
     </main>
   )
+}
+
+function StoryGame({ story }:any) {
+  let sentences = story.sentences
+  const [currentSentence, setCurrentSentence] = useState<number>(0)
+
+  return <>
+    <Card sx={{ maxWidth: 345 }}>
+      <CardMedia
+        sx={{ height: 140, backgroundPosition: "center bottom" }}
+        image="/asl_mouse.jpg"
+        title={ story.title }
+      />
+      <CardContent sx={{minHeight: 150}}>
+        <Typography gutterBottom variant="h5" component="div">
+          { story.title }
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+            { currentSentence >= sentences.length ? "The End" : sentences[currentSentence]}
+        </Typography>
+      </CardContent>
+      <CardActions
+        sx={
+          {
+            display: "flex",
+            justifyContent: "center",
+          }
+        }
+       >
+        <Button size="small"
+          style={{float: "right"}}
+          onClick={
+            () => {
+              if (currentSentence > 0)
+                setCurrentSentence(sentence => sentence - 1)
+            }
+          }>Prev</Button>
+        <Button size="small"
+          onClick={
+            () => {
+              if (currentSentence < sentences.length)
+                setCurrentSentence(sentence => sentence + 1)
+            }
+          }>Next</Button>
+      </CardActions>
+    </Card>
+  </>
 }
